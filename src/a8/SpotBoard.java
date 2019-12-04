@@ -33,6 +33,8 @@ public interface SpotBoard extends Iterable<Spot> {
 	int getSpotHeight();
 
 	Spot getSpotAt(int x, int y);
+	
+	void updateSpots();
 
 	void addSpotListener(SpotListener spot_listener);
 

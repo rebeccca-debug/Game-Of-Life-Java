@@ -62,6 +62,17 @@ public interface Spot {
 			highlightSpot();
 		}
 	}
+	
+	boolean isLiving();
+	void lifeSpot();
+	void deadSpot();
+	default void toggleLiving() {
+		if (isLiving()) {
+			deadSpot();
+		} else {
+			lifeSpot();
+		}
+	}
 
 	void setBackground(Color c);
 	Color getBackground();

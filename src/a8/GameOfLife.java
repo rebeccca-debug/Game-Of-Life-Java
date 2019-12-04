@@ -1,26 +1,25 @@
 package a8;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-public class GameOfLife extends JPanel implements ActionListener {
+public class GameOfLife extends JFrame{
 	
-	private JSpotBoard board;
-	
-	public void run() {
-		board = new JSpotBoard(250,250);
-	}
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static void main(String[] args) {
 		
 		JFrame main_frame = new JFrame();
-		main_frame.setTitle("Tic Tac Toe");
+		main_frame.setTitle("Conway's Game of Life");
 		main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		main_frame.setPreferredSize(new Dimension(1000, 1000));
 
 		/* Create panel for content. Uses BorderLayout. */
 		JPanel top_panel = new JPanel();
@@ -31,7 +30,7 @@ public class GameOfLife extends JPanel implements ActionListener {
 		 * of content panel.
 		 */
 		
-		GameOfLife g = new GameOfLife();
+		GameOfLifeWidget g = new GameOfLifeWidget();
 		top_panel.add(g, BorderLayout.CENTER);
 
 
@@ -39,12 +38,6 @@ public class GameOfLife extends JPanel implements ActionListener {
 		
 		main_frame.pack();
 		main_frame.setVisible(true);	
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

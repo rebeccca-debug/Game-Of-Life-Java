@@ -30,11 +30,15 @@ public class JSpotBoard extends JPanel implements SpotBoard {
 	private static final Color DEFAULT_BACKGROUND_DARK = new Color(0.5f, 0.5f, 0.5f);
 	private static final Color DEFAULT_SPOT_COLOR = Color.BLACK;
 	private static final Color DEFAULT_HIGHLIGHT_COLOR = Color.YELLOW;
-
+	private int lowBirth = 3;
+	private int highBirth = 3;
+	private int lowSurvive = 2;
+	private int highSurvive = 3;
+	private boolean torus = false;
 	private Spot[][] _spots;
 	
 	public JSpotBoard(int width, int height) {
-		if (width < 1 || height < 1 || width > 50 || height > 50) {
+		if (width < 10 || height < 10 || width > 500 || height > 500) {
 			throw new IllegalArgumentException("Illegal spot board geometry");
 		}
 		setLayout(new GridLayout(height, width));
@@ -65,6 +69,105 @@ public class JSpotBoard extends JPanel implements SpotBoard {
 	}
 
 	// Lookup method for Spot at position (x,y)
+	
+	
+	@Override
+	public void updateSpots() {
+		
+		ArrayList<Spot> spotsToUpdate = new ArrayList<Spot>();
+		for(int x = 0; x < getSpotWidth(); x++) {
+     	   for(int y = 0; y < getSpotHeight(); y++) {
+     		  int numAroundLiving = 0;
+     		  if (!torus) {
+	     		  if(x-1 > 0) {
+	     			  if(_spots[x-1][y].isLiving()) {
+	     				  numAroundLiving++;
+	     			  }
+	     			 if(y+1 < getSpotHeight()) {
+	       			  if(_spots[x-1][y+1].isLiving()) {
+	       				  numAroundLiving++;
+	       			  }
+	     			 }
+	     			 if(y-1 > 0) {
+	        			  if(_spots[x-1][y-1].isLiving()) {
+	        				  numAroundLiving++;
+	        			  }
+	        		  }
+	     		  }
+	     		  if(x+1 < getSpotWidth()) {
+	    			  if(_spots[x+1][y].isLiving()) {
+	    				  numAroundLiving++;
+	    			  }
+	    			  if(y+1 < getSpotHeight()) {
+	           			  if(_spots[x+1][y+1].isLiving()) {
+	           				  numAroundLiving++;
+	           			  }
+	         			 }
+	         		  if(y-1 > 0) {
+	            		  if(_spots[x+1][y-1].isLiving()) {
+	            				  numAroundLiving++;
+	            			  }
+	            		  }
+	    		  }
+	     		  if(y-1 > 0) {
+	     			  if(_spots[x][y-1].isLiving()) {
+	     				  numAroundLiving++;
+	     			  }
+	     		  }
+	     		  if(y+1 < getSpotHeight()) {
+	    			  if(_spots[x][y+1].isLiving()) {
+	    				  numAroundLiving++;
+	    			  }
+	    		  }
+     		  }
+     		  else {
+     			 if(_spots[Math.floorMod((x+1),this.getSpotWidth())][Math.floorMod((y),this.getSpotHeight())].isLiving()) {
+     				 numAroundLiving++;
+     			 }
+     			 if(_spots[Math.floorMod((x+1),this.getSpotWidth())][Math.floorMod((y+1),this.getSpotHeight())].isLiving()) {
+    				 numAroundLiving++;
+    			 }
+     			 if(_spots[Math.floorMod((x),this.getSpotWidth())][Math.floorMod((y+1),this.getSpotHeight())].isLiving()) {
+    				 numAroundLiving++;
+    			 }
+     			 if(_spots[Math.floorMod((x-1),this.getSpotWidth())][Math.floorMod((y+1),this.getSpotHeight())].isLiving()) {
+    				 numAroundLiving++;
+    			 }
+     			 if(_spots[Math.floorMod((x-1),this.getSpotWidth())][Math.floorMod((y),this.getSpotHeight())].isLiving()) {
+    				 numAroundLiving++;
+    			 }
+     			 if(_spots[Math.floorMod((x-1),this.getSpotWidth())][Math.floorMod((y-1),this.getSpotHeight())].isLiving()) {
+    				 numAroundLiving++;
+    			 }
+     			 if(_spots[Math.floorMod((x),this.getSpotWidth())][Math.floorMod((y-1),this.getSpotHeight())].isLiving()) {
+    				 numAroundLiving++;
+    			 }
+     			 if(_spots[Math.floorMod((x+1),this.getSpotWidth())][Math.floorMod((y-1),this.getSpotHeight())].isLiving()) {
+    				 numAroundLiving++;
+    			 }
+     		  }
+     		  if(!_spots[x][y].isLiving() && (numAroundLiving >= lowBirth && numAroundLiving <= highBirth)) {
+     			  spotsToUpdate.add(_spots[x][y]);
+     		  }
+     		  if(_spots[x][y].isLiving() && (numAroundLiving < lowSurvive || numAroundLiving > highSurvive)) {
+    			  spotsToUpdate.add(_spots[x][y]);
+    		  }
+     		  
+     	   }
+        }
+		
+		for(Spot s : spotsToUpdate) {
+			s.toggleLiving();
+		}
+		
+	}
+	
+	public void updateThresholds(int a, int b, int c, int d) {
+		lowBirth = a;
+		highBirth = b;
+		lowSurvive = c;
+		highSurvive = d;
+	}
 	
 	@Override
 	public Spot getSpotAt(int x, int y) {
@@ -98,5 +201,14 @@ public class JSpotBoard extends JPanel implements SpotBoard {
 	@Override
 	public Iterator<Spot> iterator() {
 		return new SpotBoardIterator(this);
+	}
+	
+	public void toggleTorus() {
+		if (torus) {
+			torus = false;
+		}
+		else {
+			torus = true;
+		}
 	}
 }

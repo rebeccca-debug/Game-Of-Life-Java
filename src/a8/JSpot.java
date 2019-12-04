@@ -30,11 +30,16 @@ import javax.swing.BorderFactory;
 
 public class JSpot extends JPanel implements MouseListener, Spot {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Color _spot_color;
 	private Color _highlight_color;
 
 	private boolean _is_empty;
 	private boolean _is_highlighted;
+	private boolean _is_alive;
 	private SpotBoard _board;
 	private int _x;
 	private int _y;
@@ -49,6 +54,7 @@ public class JSpot extends JPanel implements MouseListener, Spot {
 
 		_spot_color = spot_color;
 		_highlight_color = highlight;
+		_is_alive = false;
 		_is_empty = true;
 		_is_highlighted = false;
 		_board = board;
@@ -232,5 +238,33 @@ public class JSpot extends JPanel implements MouseListener, Spot {
 			}
 		}).start();
 
+	}
+
+	@Override
+	public boolean isLiving() {
+		// TODO Auto-generated method stub
+		return _is_alive;
+	}
+
+	@Override
+	public void lifeSpot() {
+		_is_alive = true;
+		// TODO Auto-generated method stub
+		Color c = Color.white;
+		
+		if (c == null) throw new IllegalArgumentException("null color");
+
+		setBackground(c);
+	}
+
+	@Override
+	public void deadSpot() {
+		_is_alive = false;
+		// TODO Auto-generated method stub
+		Color c = Color.black;
+		
+		if (c == null) throw new IllegalArgumentException("null color");
+
+		setBackground(c);
 	}
 }
