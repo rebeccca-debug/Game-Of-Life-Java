@@ -1,3 +1,6 @@
+Repo for Assignment 7 of Foundations of Programming- KMP, Fall 2019.
+
+
 # Assignment 7
 
 In this assignment, you'll make a few single widget games building on top of a SpotBoard component that I provide.
